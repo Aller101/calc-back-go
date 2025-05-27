@@ -57,7 +57,7 @@ func postCalc(c echo.Context) error {
 }
 
 func main() {
-
+	fmt.Println("------------------")
 	e := echo.New()
 	e.Use(middleware.CORS())
 	e.Use(middleware.Logger())
