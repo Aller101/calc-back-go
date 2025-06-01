@@ -28,8 +28,11 @@ type CalculationRequest struct {
 // var calculations = []Calculation{}
 
 func initDB() {
-	dsn := "host=localhost user=postgres password=1233 dbname=postgres port=5432 sslmode=disable"
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	dsn := "host=localhost user=postgres password=1111 dbname=postgres port=5432 sslmode=disable"
+
+	var err error
+
+	db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Fatalf("Could not con to db: %v", err)
 	}
