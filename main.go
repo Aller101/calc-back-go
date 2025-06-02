@@ -28,7 +28,7 @@ type CalculationRequest struct {
 // var calculations = []Calculation{}
 
 func initDB() {
-	dsn := "host=localhost user=postgres password=1111 dbname=postgres port=5432 sslmode=disable"
+	dsn := "host=localhost user=postgres password=1233 dbname=postgres port=5432 sslmode=disable"
 
 	var err error
 
@@ -106,17 +106,14 @@ func patchCalc(c echo.Context) error {
 	return c.JSON(http.StatusOK, calc)
 }
 
-// func deleteCalc(c echo.Context) error {
-// 	id := c.Param("id")
-// 	for i, v := range calculations {
-// 		if v.Id == id {
-// 			calculations = append(calculations[:i], calculations[i+1:]...)
-// 			return c.NoContent(http.StatusNoContent)
-// 		}
-// 	}
-// 	return c.JSON(http.StatusBadRequest, map[string]string{"error": "Calcilation not found"})
+func deleteCalc(c echo.Context) error {
+	id := c.Param("id")
 
-// }
+	if err := db.Delete(&Calculation{}, "id=?", id).Error; err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Calcilation not found"})
+	}
+	return c.NoContent(http.StatusNoContent)
+}
 
 func main() {
 	fmt.Println("------------------")
@@ -128,7 +125,7 @@ func main() {
 	e.GET("/calculations", getCalcs)
 	e.POST("/calculations", postCalc)
 	e.PATCH("/calculations/:id", patchCalc)
-	// e.DELETE("/calculations/:id", deleteCalc)
+	e.DELETE("/calculations/:id", deleteCalc)
 
 	e.Start("localhost:8080")
 
