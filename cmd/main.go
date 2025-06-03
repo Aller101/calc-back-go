@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 
+	"github.com/Aller101/calc-back-go/internal/config"
 	"github.com/Aller101/calc-back-go/internal/db"
 	"github.com/Aller101/calc-back-go/internal/handlers"
 	"github.com/Aller101/calc-back-go/internal/service"
@@ -12,7 +13,9 @@ import (
 
 func main() {
 
-	datab, err := db.InitDB()
+	cfg := config.MustLoad()
+
+	datab, err := db.InitDB(*cfg)
 	if err != nil {
 		log.Fatalf("Could not con to db: %v", err)
 	}
@@ -30,6 +33,6 @@ func main() {
 	e.PATCH("/calculations/:id", calcHandl.PatchCalc)
 	e.DELETE("/calculations/:id", calcHandl.DeleteCalc)
 
-	e.Start("localhost:8080")
+	e.Start(cfg.Address)
 
 }

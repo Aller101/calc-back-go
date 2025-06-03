@@ -1,8 +1,10 @@
 package db
 
 import (
+	"fmt"
 	"log"
 
+	"github.com/Aller101/calc-back-go/internal/config"
 	"github.com/Aller101/calc-back-go/internal/service"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -10,8 +12,8 @@ import (
 
 var db *gorm.DB
 
-func InitDB() (*gorm.DB, error) {
-	dsn := "host=localhost user=postgres password=1233 dbname=postgres port=5432 sslmode=disable"
+func InitDB(c config.Config) (*gorm.DB, error) {
+	dsn := DSN(c)
 
 	var err error
 
@@ -23,4 +25,16 @@ func InitDB() (*gorm.DB, error) {
 		log.Fatalf("Migrate: %v", err)
 	}
 	return db, nil
+}
+
+func DSN(c config.Config) string {
+	return fmt.Sprintf(
+		"host=%s user=%s password=%s dbname=%s port=%s sslmode=%s",
+		c.Host,
+		c.User,
+		c.Password,
+		c.Dbname,
+		c.Port,
+		c.Sslmode,
+	)
 }
